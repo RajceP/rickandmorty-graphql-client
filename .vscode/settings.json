@@ -12,12 +12,12 @@
     "*.js": "javascriptreact"
   },
   "peacock.color": "#221a36",
-  "peacock.remoteColor": "#61dafb",
+  "peacock.remoteColor": "#97ce4c",
   "tsImportSorter.configuration.autoFormat": "onSave",
   "workbench.colorCustomizations": {
-    "titleBar.activeBackground": "#61dafb",
+    "titleBar.activeBackground": "#97ce4c",
     "titleBar.activeForeground": "#15202b",
-    "titleBar.inactiveBackground": "#61dafb99",
+    "titleBar.inactiveBackground": "#97ce4c99",
     "titleBar.inactiveForeground": "#15202b99"
   }
 }

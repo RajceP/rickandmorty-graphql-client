@@ -1,0 +1,61 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2020,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "prettier",
+    "prettier/react",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "plugins": ["prettier"],
+  "globals": {
+    "localStorage": true,
+    "fetch": true
+  },
+  "rules": {
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js", ".tsx"]
+      }
+    ],
+    "radix": 0,
+    "consistent-return": 0,
+    "no-await-in-loop": 0,
+    "no-console": 0,
+    "no-param-reassign": [2, { "props": false }],
+    "no-restricted-syntax": 0,
+    "no-return-assign": [2, "except-parens"],
+    "no-underscore-dangle": 0,
+    "no-unused-vars": [1, { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    "no-use-before-define": 0,
+    "import/no-cycle": 0,
+    "import/prefer-default-export": 0,
+    "import/extensions": 0,
+    "react/forbid-prop-types": 0,
+    "react/jsx-props-no-spreading": 0,
+    "react/prop-types": [2, { "skipUndeclared": true }],
+    "react/state-in-constructor": 0,
+    "jsx-a11y/click-events-have-key-events": 0
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src/"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
+}

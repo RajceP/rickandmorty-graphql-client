@@ -1,14 +1,20 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import './index.css';
 import * as serviceWorker from './serviceWorker';
 
+const client = new ApolloClient({
+  uri: 'https://rickandmortyapi.com/graphql/',
+  cache: new InMemoryCache(),
+});
+
 ReactDOM.render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </ApolloProvider>,
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -16,7 +16,7 @@
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint"
   ],
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "graphql"],
   "globals": {
     "localStorage": true,
     "fetch": true

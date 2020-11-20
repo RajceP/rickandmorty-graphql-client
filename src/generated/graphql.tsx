@@ -1,6 +1,6 @@
-import * as Apollo from '@apollo/client';
 import { gql } from '@apollo/client';
-export type Maybe<T> = T | null | undefined;
+import * as Apollo from '@apollo/client';
+export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -35,40 +35,49 @@ export type Query = {
   episodesByIds?: Maybe<Array<Maybe<Episode>>>;
 };
 
+
 export type QueryCharacterArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QueryCharactersArgs = {
   page?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterCharacter>;
 };
 
+
 export type QueryCharactersByIdsArgs = {
   ids: Array<Scalars['ID']>;
 };
 
+
 export type QueryLocationArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QueryLocationsArgs = {
   page?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterLocation>;
 };
 
+
 export type QueryLocationsByIdsArgs = {
   ids: Array<Scalars['ID']>;
 };
+
 
 export type QueryEpisodeArgs = {
   id: Scalars['ID'];
 };
 
+
 export type QueryEpisodesArgs = {
   page?: Maybe<Scalars['Int']>;
   filter?: Maybe<FilterEpisode>;
 };
+
 
 export type QueryEpisodesByIdsArgs = {
   ids: Array<Scalars['ID']>;
@@ -186,70 +195,67 @@ export type Episodes = {
 
 export enum CacheControlScope {
   Public = 'PUBLIC',
-  Private = 'PRIVATE',
+  Private = 'PRIVATE'
 }
 
-export type GetCharactersQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetCharactersQuery = { __typename?: 'Query' } & {
-  characters?: Maybe<
-    { __typename?: 'Characters' } & {
-      results?: Maybe<
-        Array<
-          Maybe<{ __typename?: 'Character' } & Pick<Character, 'id' | 'name' | 'status' | 'image'>>
-        >
-      >;
+export type GetCharactersListQueryVariables = Exact<{
+  page: Scalars['Int'];
+}>;
+
+
+export type GetCharactersListQuery = (
+  { __typename?: 'Query' }
+  & { characters?: Maybe<(
+    { __typename?: 'Characters' }
+    & { info?: Maybe<(
+      { __typename?: 'Info' }
+      & Pick<Info, 'next'>
+    )>, results?: Maybe<Array<Maybe<(
+      { __typename?: 'Character' }
+      & Pick<Character, 'id' | 'name' | 'image'>
+    )>>> }
+  )> }
+);
+
+
+export const GetCharactersListDocument = gql`
+    query getCharactersList($page: Int!) {
+  characters(page: $page) {
+    info {
+      next
     }
-  >;
-};
-
-export const GetCharactersDocument = gql`
-  query getCharacters {
-    characters {
-      results {
-        id
-        name
-        status
-        image
-      }
+    results {
+      id
+      name
+      image
     }
   }
-`;
+}
+    `;
 
 /**
- * __useGetCharactersQuery__
+ * __useGetCharactersListQuery__
  *
- * To run a query within a React component, call `useGetCharactersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCharactersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCharactersListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCharactersListQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCharactersQuery({
+ * const { data, loading, error } = useGetCharactersListQuery({
  *   variables: {
+ *      page: // value for 'page'
  *   },
  * });
  */
-export function useGetCharactersQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetCharactersQuery, GetCharactersQueryVariables>,
-) {
-  return Apollo.useQuery<GetCharactersQuery, GetCharactersQueryVariables>(
-    GetCharactersDocument,
-    baseOptions,
-  );
-}
-export function useGetCharactersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetCharactersQuery, GetCharactersQueryVariables>,
-) {
-  return Apollo.useLazyQuery<GetCharactersQuery, GetCharactersQueryVariables>(
-    GetCharactersDocument,
-    baseOptions,
-  );
-}
-export type GetCharactersQueryHookResult = ReturnType<typeof useGetCharactersQuery>;
-export type GetCharactersLazyQueryHookResult = ReturnType<typeof useGetCharactersLazyQuery>;
-export type GetCharactersQueryResult = Apollo.QueryResult<
-  GetCharactersQuery,
-  GetCharactersQueryVariables
->;
+export function useGetCharactersListQuery(baseOptions: Apollo.QueryHookOptions<GetCharactersListQuery, GetCharactersListQueryVariables>) {
+        return Apollo.useQuery<GetCharactersListQuery, GetCharactersListQueryVariables>(GetCharactersListDocument, baseOptions);
+      }
+export function useGetCharactersListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCharactersListQuery, GetCharactersListQueryVariables>) {
+          return Apollo.useLazyQuery<GetCharactersListQuery, GetCharactersListQueryVariables>(GetCharactersListDocument, baseOptions);
+        }
+export type GetCharactersListQueryHookResult = ReturnType<typeof useGetCharactersListQuery>;
+export type GetCharactersListLazyQueryHookResult = ReturnType<typeof useGetCharactersListLazyQuery>;
+export type GetCharactersListQueryResult = Apollo.QueryResult<GetCharactersListQuery, GetCharactersListQueryVariables>;

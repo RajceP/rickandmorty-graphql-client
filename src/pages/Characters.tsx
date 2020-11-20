@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GetCharactersDocument, useGetCharactersQuery } from '../generated/graphql';
+import { useGetCharactersListQuery } from '../generated/graphql';
 
 const Grid = styled.div`
+  margin: auto;
+  width: 80%;
   display: grid;
-  gap: 0.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.4rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 `;
 
 const Card = styled.div`
@@ -13,7 +15,8 @@ const Card = styled.div`
   flex-direction: column;
   margin: 1rem;
   border-radius: 12px;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2), 0 0 12px rgba(0, 0, 0, 0.2);
+  background-color: ${({ theme }) => theme.colors.atlantis};
+  box-shadow: ${({ theme }) => theme.shadow};
 `;
 
 const Img = styled.img`
@@ -25,12 +28,18 @@ const Img = styled.img`
 const TextCont = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: center;
   margin: 0.2rem;
   padding: 0.2rem;
 `;
 
 const Characters: React.FC = () => {
-  const { loading, error, data } = useGetCharactersQuery({ query: GetCharactersDocument });
+  const { loading, error, data, fetchMore } = useGetCharactersListQuery({
+    variables: {
+      page: 1,
+    },
+    notifyOnNetworkStatusChange: true,
+  });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error! {error.message}</p>;
@@ -41,15 +50,28 @@ const Characters: React.FC = () => {
     return !ch ? null : (
       <Card key={ch?.id}>
         {ch?.image && ch?.name && <Img src={ch?.image} alt={ch?.name} />}
-        <TextCont>
-          <span>Name: {ch?.name}</span>
-          <span>Status: {ch?.status}</span>
-        </TextCont>
+        <TextCont>{ch?.name}</TextCont>
       </Card>
     );
   });
 
-  return <Grid>{characters}</Grid>;
+  return (
+    <>
+      <Grid>{characters}</Grid>
+      <button
+        type="button"
+        onClick={() => {
+          fetchMore({
+            variables: {
+              page: data?.characters?.info?.next,
+            },
+          });
+        }}
+      >
+        MORE
+      </button>
+    </>
+  );
 };
 
 export default Characters;

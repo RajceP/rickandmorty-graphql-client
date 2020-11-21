@@ -12,7 +12,7 @@ const client = new ApolloClient({
             merge(existing, incoming) {
               //! This is ugly!
               let merged;
-              if (!existing) {
+              if (!existing || !incoming?.info?.prev) {
                 merged = incoming;
               } else {
                 merged = JSON.parse(JSON.stringify(existing));

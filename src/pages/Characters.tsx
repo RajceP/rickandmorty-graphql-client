@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
+import Input from '../components/UI/Input';
 import Loader from '../components/UI/Loader';
 import { useGetCharactersListQuery } from '../generated/graphql';
+import useDebounce from '../hooks/useDebounce';
 
 const Grid = styled.div`
-  margin: auto;
   display: grid;
-  gap: 0.4rem;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 `;
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 1rem;
   border: 4px solid ${({ theme }) => theme.colors.tonysPink};
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.atlantis};
@@ -22,8 +22,8 @@ const Card = styled.div`
 `;
 
 const Img = styled.img`
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   object-fit: cover;
 `;
 
@@ -36,17 +36,43 @@ const TextCont = styled.div`
 `;
 
 const Characters: React.FC = () => {
-  const { loading, error, data, fetchMore } = useGetCharactersListQuery({
+  const [searchInput, setSearchInput] = useState('');
+  const debouncedSearchInput = useDebounce(searchInput, 500);
+  const { loading, error, data, fetchMore, refetch } = useGetCharactersListQuery({
     variables: {
       page: 1,
     },
-    // notifyOnNetworkStatusChange: true,
   });
 
-  if (loading) return <Loader />;
-  if (error) return <p>Error! {error.message}</p>;
+  useEffect(() => {
+    if (debouncedSearchInput || debouncedSearchInput === '') {
+      fetchSearched();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchInput]);
 
-  // return <pre>{JSON.stringify(data, undefined, 2)}</pre>;
+  const fetchSearched = () => {
+    if (searchInput === '') {
+      refetch({ page: 1, filter: null });
+    } else if (searchInput.length < 3) {
+      return null;
+    } else {
+      refetch({
+        filter: { name: searchInput },
+      });
+    }
+  };
+
+  const hasMore = () => {
+    if (data?.characters?.info?.next && data?.characters?.info?.pages) {
+      return data?.characters?.info?.next < data?.characters?.info?.pages;
+    }
+    return false;
+  };
+
+  const searchInputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
+  };
 
   const characters = data?.characters?.results?.map((ch) => {
     return !ch ? null : (
@@ -57,30 +83,31 @@ const Characters: React.FC = () => {
     );
   });
 
-  const hasMore = () => {
-    if (data?.characters?.info?.next && data?.characters?.info?.pages) {
-      return data?.characters?.info?.next < data?.characters?.info?.pages;
-    }
-    return false;
-  };
-
   return (
-    <InfiniteScroll
-      pageStart={0}
-      loadMore={() => {
-        fetchMore({
-          variables: {
-            page: data?.characters?.info?.next,
-          },
-        });
-      }}
-      hasMore={hasMore()}
-      loader={<Loader />}
-      initialLoad={false}
-      useWindow
-    >
-      <Grid>{characters}</Grid>
-    </InfiniteScroll>
+    <>
+      <Input changed={(event) => searchInputChangeHandler(event)} value={searchInput} />
+      {loading && <Loader key="fetch" />}
+      {error && <p>Error! {error.message}</p>}
+      {!loading && !error && (
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={() => {
+            fetchMore({
+              variables: {
+                page: data?.characters?.info?.next,
+                filter: { name: searchInput },
+              },
+            });
+          }}
+          hasMore={hasMore()}
+          loader={<Loader key="fetchMore" />}
+          initialLoad={false}
+          useWindow
+        >
+          <Grid>{characters}</Grid>
+        </InfiniteScroll>
+      )}
+    </>
   );
 };
 

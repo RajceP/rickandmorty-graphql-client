@@ -201,6 +201,7 @@ export enum CacheControlScope {
 
 export type GetCharactersListQueryVariables = Exact<{
   page: Scalars['Int'];
+  filter?: Maybe<FilterCharacter>;
 }>;
 
 
@@ -210,7 +211,7 @@ export type GetCharactersListQuery = (
     { __typename?: 'Characters' }
     & { info?: Maybe<(
       { __typename?: 'Info' }
-      & Pick<Info, 'pages' | 'next'>
+      & Pick<Info, 'pages' | 'prev' | 'next'>
     )>, results?: Maybe<Array<Maybe<(
       { __typename?: 'Character' }
       & Pick<Character, 'id' | 'name' | 'image'>
@@ -220,10 +221,11 @@ export type GetCharactersListQuery = (
 
 
 export const GetCharactersListDocument = gql`
-    query getCharactersList($page: Int!) {
-  characters(page: $page) {
+    query getCharactersList($page: Int!, $filter: FilterCharacter) {
+  characters(page: $page, filter: $filter) {
     info {
       pages
+      prev
       next
     }
     results {
@@ -248,6 +250,7 @@ export const GetCharactersListDocument = gql`
  * const { data, loading, error } = useGetCharactersListQuery({
  *   variables: {
  *      page: // value for 'page'
+ *      filter: // value for 'filter'
  *   },
  * });
  */

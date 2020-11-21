@@ -1,10 +1,11 @@
 import React from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
+import Loader from '../components/UI/Loader';
 import { useGetCharactersListQuery } from '../generated/graphql';
 
 const Grid = styled.div`
   margin: auto;
-  width: 80%;
   display: grid;
   gap: 0.4rem;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -14,6 +15,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   margin: 1rem;
+  border: 4px solid ${({ theme }) => theme.colors.tonysPink};
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.atlantis};
   box-shadow: ${({ theme }) => theme.shadow};
@@ -38,10 +40,10 @@ const Characters: React.FC = () => {
     variables: {
       page: 1,
     },
-    notifyOnNetworkStatusChange: true,
+    // notifyOnNetworkStatusChange: true,
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>Error! {error.message}</p>;
 
   // return <pre>{JSON.stringify(data, undefined, 2)}</pre>;
@@ -55,22 +57,30 @@ const Characters: React.FC = () => {
     );
   });
 
+  const hasMore = () => {
+    if (data?.characters?.info?.next && data?.characters?.info?.pages) {
+      return data?.characters?.info?.next < data?.characters?.info?.pages;
+    }
+    return false;
+  };
+
   return (
-    <>
+    <InfiniteScroll
+      pageStart={0}
+      loadMore={() => {
+        fetchMore({
+          variables: {
+            page: data?.characters?.info?.next,
+          },
+        });
+      }}
+      hasMore={hasMore()}
+      loader={<Loader />}
+      initialLoad={false}
+      useWindow
+    >
       <Grid>{characters}</Grid>
-      <button
-        type="button"
-        onClick={() => {
-          fetchMore({
-            variables: {
-              page: data?.characters?.info?.next,
-            },
-          });
-        }}
-      >
-        MORE
-      </button>
-    </>
+    </InfiniteScroll>
   );
 };
 

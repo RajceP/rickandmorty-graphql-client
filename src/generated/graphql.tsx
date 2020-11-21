@@ -210,7 +210,7 @@ export type GetCharactersListQuery = (
     { __typename?: 'Characters' }
     & { info?: Maybe<(
       { __typename?: 'Info' }
-      & Pick<Info, 'next'>
+      & Pick<Info, 'pages' | 'next'>
     )>, results?: Maybe<Array<Maybe<(
       { __typename?: 'Character' }
       & Pick<Character, 'id' | 'name' | 'image'>
@@ -223,6 +223,7 @@ export const GetCharactersListDocument = gql`
     query getCharactersList($page: Int!) {
   characters(page: $page) {
     info {
+      pages
       next
     }
     results {

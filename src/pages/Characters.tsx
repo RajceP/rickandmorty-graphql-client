@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
-import Input from '../components/UI/Input';
-import Loader from '../components/UI/Loader';
+import CharactersCard from '../components/Characters/CharactersCard';
+import Loader from '../components/Shared/InfoText';
+import Input from '../components/Shared/Input';
 import { useGetCharactersListQuery } from '../generated/graphql';
 import useDebounce from '../hooks/useDebounce';
 
@@ -10,29 +11,6 @@ const Grid = styled.div`
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-`;
-
-const Card = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 4px solid ${({ theme }) => theme.colors.tonysPink};
-  border-radius: 12px;
-  background-color: ${({ theme }) => theme.colors.atlantis};
-  box-shadow: ${({ theme }) => theme.shadow};
-`;
-
-const Img = styled.img`
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  object-fit: cover;
-`;
-
-const TextCont = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  margin: 0.2rem;
-  padding: 0.2rem;
 `;
 
 const Characters: React.FC = () => {
@@ -67,6 +45,7 @@ const Characters: React.FC = () => {
     if (data?.characters?.info?.next && data?.characters?.info?.pages) {
       return data?.characters?.info?.next < data?.characters?.info?.pages;
     }
+
     return false;
   };
 
@@ -75,19 +54,18 @@ const Characters: React.FC = () => {
   };
 
   const characters = data?.characters?.results?.map((ch) => {
-    return !ch ? null : (
-      <Card key={ch?.id}>
-        {ch?.image && ch?.name && <Img src={ch?.image} alt={ch?.name} />}
-        <TextCont>{ch?.name}</TextCont>
-      </Card>
-    );
+    return !ch ? null : <CharactersCard {...ch} key={ch?.id} />;
   });
 
   return (
     <>
-      <Input changed={(event) => searchInputChangeHandler(event)} value={searchInput} />
-      {loading && <Loader key="fetch" />}
-      {error && <p>Error! {error.message}</p>}
+      <Input
+        changed={(event) => searchInputChangeHandler(event)}
+        value={searchInput}
+        placeholder="Search..."
+      />
+      {loading && <Loader text="Loading..." />}
+      {error && <Loader text="Error..." />}
       {!loading && !error && (
         <InfiniteScroll
           pageStart={0}
@@ -100,7 +78,7 @@ const Characters: React.FC = () => {
             });
           }}
           hasMore={hasMore()}
-          loader={<Loader key="fetchMore" />}
+          loader={<Loader text="Loading..." />}
           initialLoad={false}
           useWindow
         >

@@ -20,6 +20,41 @@ html {
 body {
   font-family: 'Permanent Marker', cursive;
   background-color: ${({ theme }) => theme.colors.cork};
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  word-wrap: break-word;
+  font-kerning: normal;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: ${({ theme }) => theme.colors.tonysPink};;
+  border-radius: 10px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: ${({ theme }) => theme.colors.starship};;;
 }
 `;
 

@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
 import CharactersCard from '../components/Characters/CharactersCard';
-import Loader from '../components/Shared/InfoText';
+import InfoText from '../components/Shared/InfoText';
 import Input from '../components/Shared/Input';
 import { useGetCharactersListQuery } from '../generated/graphql';
 import useDebounce from '../hooks/useDebounce';
@@ -64,8 +64,8 @@ const Characters: React.FC = () => {
         value={searchInput}
         placeholder="Search..."
       />
-      {loading && <Loader text="Loading..." />}
-      {error && <Loader text="Error..." />}
+      {loading && <InfoText text="Loading..." />}
+      {error && <InfoText text="Error..." />}
       {!loading && !error && (
         <InfiniteScroll
           pageStart={0}
@@ -78,7 +78,7 @@ const Characters: React.FC = () => {
             });
           }}
           hasMore={hasMore()}
-          loader={<Loader text="Loading..." />}
+          loader={<InfoText text="Loading..." />}
           initialLoad={false}
           useWindow
         >

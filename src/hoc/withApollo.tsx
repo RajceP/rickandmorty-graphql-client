@@ -10,7 +10,7 @@ const client = new ApolloClient({
           characters: {
             keyArgs: false,
             merge(existing, incoming) {
-              //! This is ugly!
+              // TODO! This is ugly!
               let merged;
               if (!existing || !incoming?.info?.prev) {
                 merged = incoming;

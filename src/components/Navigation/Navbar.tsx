@@ -57,6 +57,12 @@ const Navbar: React.FC = () => {
           <Li>
             <Link to="characters">Characters</Link>
           </Li>
+          <Li>
+            <Link to="locations">Locations</Link>
+          </Li>
+          <Li>
+            <Link to="episodes">Episodes</Link>
+          </Li>
         </Ul>
       </Nav>
     </Header>

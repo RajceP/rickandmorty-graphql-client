@@ -12,7 +12,7 @@ interface Props {
   text: string;
 }
 
-const InfoText: React.FC<Props> = ({ text }: Props) => {
+const InfoText: React.FC<Props> = ({ text }) => {
   return (
     <StyledInfoText>
       <h1>{text}</h1>

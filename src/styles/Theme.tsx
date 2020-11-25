@@ -1,10 +1,6 @@
 import React from 'react';
 import { DefaultTheme, ThemeProvider } from 'styled-components';
 
-interface Props {
-  children: React.FC[] | React.FC;
-}
-
 const theme = {
   colors: {
     cork: '#44281d',
@@ -23,6 +19,10 @@ const theme = {
 };
 
 type ThemeType = typeof theme;
+
+interface Props {
+  children: React.FC[] | React.FC;
+}
 
 const Theme: DefaultTheme = ({ children }: Props) => (
   <ThemeProvider theme={theme}>{children}</ThemeProvider>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import Navbar from '../components/Navigation/Navbar';
+import SideBar from '../components/Navigation/SideBar/SideBar';
+import Toolbar from '../components/Navigation/Toolbar';
 
 const Main = styled.main`
   width: 95%;
@@ -18,13 +19,24 @@ const Main = styled.main`
   }
 `;
 
-const withLayout: React.FC = ({ children }) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const WithLayout: React.FC<Props> = ({ children }) => {
+  const [showSideBar, setShowSideBar] = useState(false); // TODO: rebuild with useContext()
+
+  const sideBarHandler = () => {
+    setShowSideBar(!showSideBar);
+  };
+
   return (
     <>
-      <Navbar />
+      <Toolbar sideBarToggleClicked={sideBarHandler} />
+      <SideBar open={showSideBar} closed={sideBarHandler} />
       <Main>{children}</Main>
     </>
   );
 };
 
-export default withLayout;
+export default WithLayout;

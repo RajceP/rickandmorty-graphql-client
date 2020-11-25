@@ -31,8 +31,8 @@ const client = new ApolloClient({
   }),
 });
 
-const withApollo: React.FC = ({ children }) => {
+const WithApollo: React.FC = ({ children }) => {
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
-export default withApollo;
+export default WithApollo;

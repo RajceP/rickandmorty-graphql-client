@@ -11,7 +11,8 @@ const Li = styled.li`
 const Link = styled(NavLink)`
   color: black;
 
-  &.active { // TODO: Nicer!
+  &.active {
+    // TODO: Nicer!
     text-decoration: underline;
   }
 
@@ -28,6 +29,10 @@ interface Props {
   children: React.ReactNode;
 }
 
+const defaultProps = {
+  exact: false,
+};
+
 const NavItem: React.FC<Props> = ({ to, exact, children }) => {
   return (
     <Li>
@@ -38,8 +43,4 @@ const NavItem: React.FC<Props> = ({ to, exact, children }) => {
   );
 };
 
-NavItem.defaultProps = {
-  exact: false,
-};
-
-export default NavItem;
+NavItem.defaultProps = defaultProps;

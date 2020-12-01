@@ -44,3 +44,5 @@ const NavItem: React.FC<Props> = ({ to, exact, children }) => {
 };
 
 NavItem.defaultProps = defaultProps;
+
+export default NavItem;

@@ -25,9 +25,13 @@ const TextCont = styled.div`
   padding: 0.2rem;
 `;
 
-const CharactersCard: React.FC<Character> = ({ name, image }: Character) => {
+interface Props extends Character {
+  clicked: () => void;
+}
+
+const CharactersCard: React.FC<Props> = ({ name, image, clicked }) => {
   return (
-    <Card>
+    <Card onClick={() => clicked()}>
       {image && name && <Img src={image} alt={name} />}
       <TextCont>{name}</TextCont>
     </Card>

@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import styled from 'styled-components';
+import CharacterModal from '../components/Characters/Character/CharacterModal';
 import CharactersCard from '../components/Characters/CharactersCard';
 import InfoText from '../components/Shared/InfoText';
 import Input from '../components/Shared/Input';
@@ -13,6 +14,11 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 `;
 
+interface IModal {
+  open: boolean;
+  id: string | null | undefined;
+}
+
 const Characters: React.FC = () => {
   const [searchInput, setSearchInput] = useState('');
   const debouncedSearchInput = useDebounce(searchInput, 500);
@@ -21,6 +27,8 @@ const Characters: React.FC = () => {
       page: 1,
     },
   });
+
+  const [modal, setModal] = useState<IModal>({ open: false, id: undefined });
 
   useEffect(() => {
     if (debouncedSearchInput || debouncedSearchInput === '') {
@@ -53,12 +61,23 @@ const Characters: React.FC = () => {
     setSearchInput(event.target.value);
   };
 
+  const characterModalHandler = (id: string | null | undefined) => {
+    setModal({ open: true, id });
+  };
+
   const characters = data?.characters?.results?.map((ch) => {
-    return !ch ? null : <CharactersCard {...ch} key={ch?.id} />;
+    return !ch ? null : (
+      <CharactersCard {...ch} clicked={() => characterModalHandler(ch?.id)} key={ch?.id} />
+    );
   });
 
   return (
     <>
+      <CharacterModal
+        open={modal.open}
+        id={modal.id}
+        closed={() => setModal({ open: false, id: undefined })}
+      />
       <Input
         changed={(event) => searchInputChangeHandler(event)}
         value={searchInput}

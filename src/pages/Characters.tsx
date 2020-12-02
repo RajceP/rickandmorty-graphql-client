@@ -16,7 +16,7 @@ const Grid = styled.div`
 
 interface IModal {
   open: boolean;
-  id: string | null | undefined;
+  id: string;
 }
 
 const Characters: React.FC = () => {
@@ -28,7 +28,7 @@ const Characters: React.FC = () => {
     },
   });
 
-  const [modal, setModal] = useState<IModal>({ open: false, id: undefined });
+  const [modal, setModal] = useState<IModal>({ open: false, id: '' });
 
   useEffect(() => {
     if (debouncedSearchInput || debouncedSearchInput === '') {
@@ -61,13 +61,13 @@ const Characters: React.FC = () => {
     setSearchInput(event.target.value);
   };
 
-  const characterModalHandler = (id: string | null | undefined) => {
+  const characterModalHandler = (id: string) => {
     setModal({ open: true, id });
   };
 
   const characters = data?.characters?.results?.map((ch) => {
     return !ch ? null : (
-      <CharactersCard {...ch} clicked={() => characterModalHandler(ch?.id)} key={ch?.id} />
+      <CharactersCard {...ch} clicked={() => characterModalHandler(ch?.id || '')} key={ch?.id} />
     );
   });
 
@@ -76,7 +76,7 @@ const Characters: React.FC = () => {
       <CharacterModal
         open={modal.open}
         id={modal.id}
-        closed={() => setModal({ open: false, id: undefined })}
+        closed={() => setModal({ open: false, id: '' })}
       />
       <Input
         changed={(event) => searchInputChangeHandler(event)}

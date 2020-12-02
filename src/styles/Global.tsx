@@ -29,9 +29,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+input,
+textarea,
+button,
+select,
+a,
+img,
+div {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 a {

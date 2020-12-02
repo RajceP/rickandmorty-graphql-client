@@ -9,6 +9,7 @@ const Card = styled.div`
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.atlantis};
   box-shadow: ${({ theme }) => theme.shadow};
+  cursor: pointer;
 `;
 
 const Img = styled.img`

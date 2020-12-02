@@ -9,6 +9,17 @@ const StyledBackdrop = styled.div`
   left: 0;
   top: 0;
   background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  animation: fadeIn 200ms;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 interface Props {
